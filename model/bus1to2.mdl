@@ -31,6 +31,7 @@ Element Generator Gen1 {
 	Eff=0.96;
 	SpecificPower=13.;
 	frequency=400; // Hz	
+	
 }
 
 
@@ -139,6 +140,7 @@ Element Turbine Turb{
 	#include "lptE3.map";	
 	PRbase=2;
 	effDes=0.9;
+
 }
 
 Nozzle Noz{

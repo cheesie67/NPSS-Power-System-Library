@@ -18,9 +18,9 @@ real defaultFrequency = 60.;
 Bat Bat{
   void postexecute(){
     EP_O.frequency = 60.;
-    EP_O.setIV( 0,0, 120, 0 );
-    EP_I1.setIV( 0, 0, 0, 0 );
-    EP_I2.setIV( 0, 0, 0, 0 );
+    EP_O.setIVRMS( 0,0, 120, 0 );
+    EP_I1.setIVRMS( 0, 0, 0, 0 );
+    EP_I2.setIVRMS( 0, 0, 0, 0 );
   }
 }
 
@@ -67,14 +67,14 @@ linkEports( "R1.EP_O", "Bat.EP_I2", "PORT" );
 
 
 n1{
-  Vreal = 120-70.5;  //guess value
-  Vimag = 43;  //guess value		
+  VrealRMS = 120-70.5;  //guess value
+  VimagRMS = 43;  //guess value		
 }
 
 
 n2{
-  Vreal = 120-70.5+7.96;  //guess value
-  Vimag = 43+6.98;  //guess value
+  VrealRMS = 120-70.5+7.96;  //guess value
+  VimagRMS = 43+6.98;  //guess value
 }
 	
 	

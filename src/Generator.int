@@ -118,6 +118,7 @@ class Generator extends Element {
 		// Compute mass based on assumed specific power.  Both Mass
 		// and loses are based on output power (Power Sent)
 		Mass = EP_O.S.r / SpecificPower;
+
 		}
 		else{
 			
@@ -138,7 +139,7 @@ class Generator extends Element {
 		
 		//real Vbus = Vbus_LL / sqrt(3.);
 		EP_O.frequency = frequency;
-		EP_O.setIV( 0., 0. , Vbus_LL,  0. );
+		EP_O.setIVRMS( 0., 0. , Vbus_LL,  0. );
 	}
 	
 }

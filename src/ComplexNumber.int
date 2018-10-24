@@ -1,8 +1,7 @@
 
 class ComplexNumber extends VariableContainer {
 	
-
-        description = "Complex Number Object";
+	description = "Complex Number Object";
 	background = "Author: Jesus Garcia (jesus2.garcia@ge.com)";
 	
 	
@@ -138,6 +137,16 @@ class ComplexNumber extends VariableContainer {
     	if ( lock == 0 ){
     		_r = r_in;
     		_j = j_in;
+    	}else{
+    		cerr << "No, no, no\n";		
+    	}
+    }
+    
+    
+    void setrjRMS( real r_in, real j_in ){
+    	if ( lock == 0 ){
+    		_r = r_in*sqrt(2);
+    		_j = j_in*sqrt(2);
     	}else{
     		cerr << "No, no, no\n";		
     	}
