@@ -1,7 +1,8 @@
 
 class ComplexNumber extends VariableContainer {
 	
-	description = "Complex Number Object";
+
+        description = "Complex Number Object";
 	background = "Author: Jesus Garcia (jesus2.garcia@ge.com)";
 	
 	
