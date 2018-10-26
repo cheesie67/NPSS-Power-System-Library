@@ -151,25 +151,25 @@ class ElectricPort extends Subelement {
 	// set the port conditions based on current, voltage, 
 	// and angles in degrees
 	//-----------------------------------------------------------
-	void setIVRMSphaseDeg( real Imag, real Iangle, real Vmag, real Vangle ){
-		setIVrms( Imag*cos(Iangle*PI/180.),	Imag*sin(Iangle*PI/180.),
-			Vmag*cos(Vangle*PI/180.),	Imag*sin(Vangle*PI/180.) );
+	void setIVRMSphaseDeg( real ImagRMS, real Iangle, real VmagRMS, real Vangle ){
+		setIVrms( ImagRMS*cos(Iangle*PI/180.),	ImagRMS*sin(Iangle*PI/180.),
+			VmagRMS*cos(Vangle*PI/180.), ImagRMS*sin(Vangle*PI/180.) );
 	}
 	
 	//-----------------------------------------------------------
 	// set the port conditions based on current, voltage, and 
 	// angles in radians
 	//-----------------------------------------------------------
-	void setIVRMSphaseRad( real Imag, real Iangle, real Vmag, real Vangle ){
-		setIVRMS( Imag*cos(Iangle),	Imag*sin(Iangle),
-			Vmag*cos(Vangle),	Imag*sin(Vangle) );
+	void setIVRMSphaseRad( real ImagRMS, real Iangle, real VmagRMS, real Vangle ){
+		setIVRMS( ImagRMS*cos(Iangle),	ImagRMS*sin(Iangle),
+			VmagRMS*cos(Vangle),	ImagRMS*sin(Vangle) );
 	}
 	
 	
 	//-----------------------------------------------------------
 	// set the port conditions based on complex current and voltage
 	//-----------------------------------------------------------
-	void setIVRMS( real Ir, real Ij, real Vr, real Vj ){
+	void setIVRMS( real IrRMS, real IjRMS, real VrRMS, real VjRMS ){
 		
 		//--------------------------------------------------------------------
 		// unlock the parameters so they can be set
@@ -179,14 +179,14 @@ class ElectricPort extends Subelement {
 		S.lock = 0;
 		
 		// set the current and voltage
-		V.setrjRMS( Vr, Vj );
-		I.setrjRMS( Ir, Ij );
+		V.setrjRMS( VrRMS, VjRMS );
+		I.setrjRMS( IrRMS, IjRMS );
 		
 		//--------------------------------------------------------------------
 		// check to see if we are in DC power mode and passing imaginary info
 		//--------------------------------------------------------------------
 		if (ElectricPowerType == "DC" ){	
-			if ( Vj!=0. || Ij!=0. ){
+			if ( VjRMS!=0. || IjRMS!=0. ){
 				cerr << "you are running a DC circuit with imaginary comps\n";	
 			}
 		}
