@@ -80,11 +80,6 @@ class ElectricPort extends Subelement {
 		description = "port used to copy from";	
 	}
 	
-	
-	ComplexNumber VLN{
-		hide( 1 );	
-	}
-	
 	//------------------------------------------------------------
 	// ******* VARIABLE CHANGED METHODOLOGY *******
 	//------------------------------------------------------------
@@ -166,6 +161,9 @@ class ElectricPort extends Subelement {
 	}
 	
 	
+	ComplexNumber VLN{
+		hide( 1 );	
+	}
 	//-----------------------------------------------------------
 	// set the port conditions based on complex current and voltage
 	//-----------------------------------------------------------
