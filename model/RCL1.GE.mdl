@@ -18,9 +18,9 @@ real defaultFrequency = 60.;
 Bat Bat{
   void postexecute(){
     EP_O.frequency = 60.;
-    EP_O.setIVRMS( 0,0, 120, 0 );
-    EP_I1.setIVRMS( 0, 0, 0, 0 );
-    EP_I2.setIVRMS( 0, 0, 0, 0 );
+    EP_O.setIV( 0,0, 120, 0 );
+    EP_I1.setIV( 0, 0, 0, 0 );
+    EP_I2.setIV( 0, 0, 0, 0 );
   }
 }
 
@@ -67,14 +67,14 @@ linkEports( "R1.EP_O", "Bat.EP_I2", "PORT" );
 
 
 n1{
-  VrealRMS = 120-70.5;  //guess value
-  VimagRMS = 43;  //guess value		
+  Vreal = 120-70.5;  //guess value
+  Vimag = 43;  //guess value		
 }
 
 
 n2{
-  VrealRMS = 120-70.5+7.96;  //guess value
-  VimagRMS = 43+6.98;  //guess value
+  Vreal = 120-70.5+7.96;  //guess value
+  Vimag = 43+6.98;  //guess value
 }
 	
 	
@@ -99,11 +99,11 @@ setOption( "ElectricPowerType", "AC1" );
 run();
 
 cerr << "Voltages\n";
-cerr << C1.EP_O.V.rRMS << " " << C1.EP_O.V.jRMS << endl;
-cerr << L1.EP_O.V.rRMS << " " << L1.EP_O.V.jRMS << endl;
+cerr << C1.EP_O.V.r << " " << C1.EP_O.V.j << endl;
+cerr << L1.EP_O.V.r << " " << L1.EP_O.V.j << endl;
 
 cerr << "Currents\n";
-cerr << C1.EP_O.I.rRMS << " " << C1.EP_O.I.jRMS << endl;
-cerr << L1.EP_O.I.rRMS << " " << L1.EP_O.I.jRMS << endl;
-cerr << C2.EP_O.I.rRMS << " " << C2.EP_O.I.jRMS << endl;
-cerr << R1.EP_O.I.rRMS << " " << R1.EP_O.I.jRMS << endl;
+cerr << C1.EP_O.I.r << " " << C1.EP_O.I.j << endl;
+cerr << L1.EP_O.I.r << " " << L1.EP_O.I.j << endl;
+cerr << C2.EP_O.I.r << " " << C2.EP_O.I.j << endl;
+cerr << R1.EP_O.I.r << " " << R1.EP_O.I.j << endl;

@@ -4,6 +4,7 @@ class ComplexNumber extends VariableContainer {
 	description = "Complex Number Object";
 	background = "Author: Jesus Garcia (jesus2.garcia@ge.com)";
 	
+	real _r, _j;
 	
 	string IOstatus {
 		value ="unset";  units = "none";
@@ -21,8 +22,8 @@ class ComplexNumber extends VariableContainer {
 	
 	void set_units(string userValue)   { 
 		_units = userValue; 
-		r.units    = userValue;
-		j.units    = userValue;
+		_r.units    = userValue;
+		_j.units    = userValue;
 		abs.units  = userValue;
 		_abs.units = userValue;
 	}
@@ -36,6 +37,26 @@ class ComplexNumber extends VariableContainer {
 	
 	string _units    = "";
 	
+	FunctVariable rPeak {
+	    IOstatus = "unset";  units = "none";
+		description = "Real part of the complex plane";
+		getFunction = "get_rPeak";
+	}
+	real get_rPeak(){
+		return _r*sqrt(2.);	
+	}
+		
+	
+	FunctVariable jPeak {
+	    IOstatus = "unset";  units = "none";
+		description = "Real part of the complex plane";
+		getFunction = "get_jPeak";
+	}
+	real get_jPeak(){
+		return _j*sqrt(2.);	
+	}
+
+	
 	FunctVariable r {
 	    IOstatus = "unset";  units = "none";
 		description = "Real part of the complex plane";
@@ -44,58 +65,38 @@ class ComplexNumber extends VariableContainer {
 	real get_r(){
 		return _r;	
 	}
-	real _r;
 	
-		
 	FunctVariable j {
-	    IOstatus = "unset";  units = "none";
-		description = "Real part of the complex plane";
+	    IOstatus = "unset";  
+	    units = "none";
+		description = "Imaginary part of the complex plane";
 		getFunction = "get_j";
 	}
 	real get_j(){
 		return _j;	
 	}
-	real _j;
-	
-	FunctVariable rRMS {
-	    IOstatus = "unset";  units = "none";
-		description = "Real part of the complex plane";
-		getFunction = "get_rRMS";
-	}
-	real get_rRMS(){
-		return _r/sqrt(2.);	
-	}
-	
-	FunctVariable jRMS {
-	    IOstatus = "unset";  
-	    units = "none";
-		description = "Imaginary part of the complex plane";
-		getFunction = "get_jRMS";
-	}
-	real get_jRMS(){
-		return _j/sqrt(2.);	
-	}
    	
-	FunctVariable mag {
+	FunctVariable peak{
 		units = "none"; 
 		IOstatus = "unset"; 
 		description = "Magnitude of the complex plane polar representation";
 		getFunction = "get_mag"; 
-		setFunction = "set_mag";
 	}
-	real get_mag() { 
-		_mag = sqrt(r*r+j*j); 
-		return _mag;
+	real get_peak() { 
+		return sqrt(_r*_r+_j*_j)*sqrt(2.); 		
 	}
-	real _mag;
+
 	
-	FunctVariable RMS {
+	FunctVariable mag {
 		units = "none"; 
 		IOstatus = "unset"; 
 		description = "rms value for electric purposes"; 
-		getFunction = "get_rms"; 
+		getFunction = "get_mag"; 
 	}
-	real get_rms() { return get_mag()/sqrt(2.0);}
+	
+	real get_mag() { 
+	    return sqrt(_r*_r+_j*_j); 	
+	}
 	
 	FunctVariable phase {
 		units = "rad"; 
@@ -120,18 +121,23 @@ class ComplexNumber extends VariableContainer {
     	getFunction = "get_phaseDeg"; 
     }
     real get_phaseDeg() { 
-		return phaseDeg*180./PI;
+		return get_phase()*180./PI;
 	}
-	
-	
-    real get_phaseDeg() { 
-    	return phase*360./(2.*PI);
-    }
     
     void scale( real scale ){
     	_r = _r*scale;
     	_j = _j*scale;
     }
+    
+    void setrjPeak( real r_in, real j_in ){
+    	if ( lock == 0 ){
+    		_r = r_in/sqrt(2.);
+    		_j = j_in/sqrt(2.);
+    	}else{
+    		cerr << "No, no, no\n";		
+    	}
+    }
+    
     
     void setrj( real r_in, real j_in ){
     	if ( lock == 0 ){
@@ -142,21 +148,21 @@ class ComplexNumber extends VariableContainer {
     	}
     }
     
-    
-    void setrjRMS( real r_in, real j_in ){
-    	if ( lock == 0 ){
-    		_r = r_in*sqrt(2);
-    		_j = j_in*sqrt(2);
-    	}else{
-    		cerr << "No, no, no\n";		
-    	}
-    }
-    
 	// change to mag
     void setMagPhase( real mag, real phase  ){
     	if ( lock == 0 ){
     		_r = mag*cos( phase ); 
     		_j = mag*sin( phase );
+    	} else{
+    		cerr << "No, no, no\n";	   		
+    	}
+    }
+    
+    // change to mag
+    void setMagPhaseDeg( real mag, real phase  ){
+    	if ( lock == 0 ){
+    		_r = mag*cos( phase*PI/180. ); 
+    		_j = mag*sin( phase*PI/180. );
     	} else{
     		cerr << "No, no, no\n";	   		
     	}
@@ -201,22 +207,17 @@ class ComplexNumber extends VariableContainer {
     	}
     }
     
-        
-    void timesRMS( string cNumName ) {
-    	if ( lock == 0 ){
-    		times( cNumName );
-    		scale( .5 );
-    	}else{
-    		cerr << "No, no, no\n";	   		
-    	}
-    }
+    
+   
     
     void div( string cNumName ) {
     	if ( lock == 0 ){
     		real denom;
     		real rLoc, jLoc, jExt, rExt;
-    		rLoc = _r; rExt = cNumName->r;
-    		jLoc = _j; jExt = cNumName->j;
+    		rLoc = _r; 
+    		rExt = cNumName->r;
+    		jLoc = _j; 
+    		jExt = cNumName->j;
     		denom = rExt**2 + jExt**2;
     		_r = (rLoc*rExt + jLoc*jExt)/denom;
     		_j = (jLoc*rExt - rLoc*jExt)/denom;

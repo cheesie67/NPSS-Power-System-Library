@@ -1,0 +1,81 @@
+#include "ElectricPort.prt"
+// simple example of 3 phase Y circuit from fifth editon of Power System Analysis and Design Page 67
+
+#include "InterpretedPort.int"
+#include "SimpleCable.int"
+
+
+class Source extends Element{
+  ElectricOutputPort EP_a;
+}
+
+class Sink extends Element{
+  ElectricInputPort EP_a;
+}
+
+real defaultFrequency = 60.;
+
+Source Source{
+    void postexecute(){
+    EP_a.setIVphaseDeg( 0,0, 480., 0. );
+    
+    }
+}
+
+Sink Sink{
+    void postexecute(){
+    EP_a.setIVphaseDeg( 0,0, 0., 0. );
+    
+    }
+}
+
+SimpleCable A1{
+	Z.setMagPhaseDeg( 1, 85 );  
+	
+	
+}
+
+SimpleCable A2{
+	Z.setMagPhaseDeg( 30./3., 40 );
+}
+
+linkEports( "Source.EP_a", "A1.EP_I", "PORT" );
+linkEports( "A1.EP_O", "NA1", "NODE" );
+linkEports( "A2.EP_I", "NA1", "NODE" );
+linkEports( "A2.EP_O", "Sink.EP_a", "PORT" );
+
+
+NA1.Vreal = 447.3*cos( -3.78*PI/180.);
+NA1.Vimag = 447.3*sin( -3.78*PI/180.);
+
+autoSolverSetup();
+
+
+//---------------------------------------------------------
+// just like a rocket engine, volumes last
+//---------------------------------------------------------
+//solverSequence = { "Bat", "R1", "C1", "L1", "C2","E1","E2" }
+//solverSequence = { "Bat", "R1", "C1", "L1", "C2" }
+solver.debugLevel = "ITERATION_DETAILS";
+solver.diagnosticFile = "Solver.bad";
+
+
+solver.maxIterations = 5000;
+solver.maxJacobians = 1000;
+setOption( "ElectricPowerType", "AC3" );
+
+cerr << solverSequence << endl;
+
+
+solver.debugLevel = "ITERATION_DETAILS";
+solver.diagnosticFile = "solver.bad";
+run();
+
+
+
+cerr << "Current" << endl;
+cerr << A1.EP_I.I.mag << " " << A1.EP_I.I.phaseDeg << endl;
+
+cerr << "Load voltage" << endl;
+cerr << A1.EP_I.V.mag << " " << A1.EP_I.V.phaseDeg << endl;
+cerr << A1.EP_I.S.r << " " << A1.EP_I.S.j << " " << A1.EP_I.PF << endl;

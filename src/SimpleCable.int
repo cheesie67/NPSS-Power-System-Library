@@ -7,7 +7,7 @@
 // ****************************************************************************
 
 //#include <InterpIncludes.ncp>
-class Resistor extends Element {
+class SimpleCable extends Element {
 	
 	//------------------------------------------------------------
 	//     ******* DOCUMENTATION *******
@@ -24,14 +24,13 @@ class Resistor extends Element {
 	//------------------------------------------------------------
 	//     ******* SETUP VARIABLES ********
 	//------------------------------------------------------------
+
 	
-	real R;
-    
 	ComplexNumber dV;
 	ComplexNumber Z;
 	ComplexNumber I;
-	
-	
+
+
 	
 	//------------------------------------------------------------
 	// ****** SETUP PORTS, FLOW STATIONS, SOCKETS, TABLES ********
@@ -39,9 +38,17 @@ class Resistor extends Element {
 	ElectricOutputPort EP_O {
 		description = "Electric port";
 	}
+	string EPortRef;
 	
 	ElectricInputPort EP_I {
 		description = "Electric Port";
+	}
+	
+	Option switchDes {
+		allowedValues = { "DESIGN", "OFFDESIGN" } ;
+		description = "Determines if the element is in design or off-design mode";
+		rewritableValues = FALSE;
+		trigger=FALSE;
 	}
 	
 	void calculate() {
@@ -50,19 +57,18 @@ class Resistor extends Element {
 		// calculate current from voltage drop
 		//-------------------------------------------------------
 		
-		dV.copy( "EP_I.V" );
-		dV.minus( "EP_O.V" );
-		Z.setrj( R, 0. );
+		dV.copy( "EP_I.VLN" );
+		dV.minus( "EP_O.VLN" );	
 		I.copy( "dV" );
 	    I.div( "Z" );
-	    
-	    
+	  
 	    //----------------------------------------------------------
 	    // set the conditions in the port
 	    //-----------------------------------------------------------
 		EP_O.setIV( I.r, I.j, EP_O.V.r, EP_O.V.j ); 
 		EP_I.setIV( I.r, I.j, EP_I.V.r, EP_I.V.j ); 		
 		EP_O.frequency=EP_I.frequency;
+		
+		
 	}
-	
 }
